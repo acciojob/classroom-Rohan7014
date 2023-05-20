@@ -25,11 +25,19 @@ public class StudentRepository {
     }
 
     public Student getStudentByName(String name) {
-        return studentDatabase.get(name);
+       // return studentDatabase.get(name);
+        for(Student student:studentDatabase.values()){
+            if(student.getName().equals(name))return student;
+        }
+        return new Student();
     }
 
     public Teacher getTeacherByName(String name) {
-        return teacherDatabase.get(name);
+        //return teacherDatabase.get(name);
+        for(Teacher teacher:teacherDatabase.values()){
+            if(teacher.getName().equals(name))return teacher;
+        }
+        return new Teacher();
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
@@ -50,10 +58,13 @@ public class StudentRepository {
                 teacherDatabase.remove(teacher);
             break;
         }
+        studentTeacherPairDatabase.remove(teacher);
+        teacherDatabase.remove(teacher);
     }
 
     public void deleteAllTeachers() {
         teacherDatabase.clear();
+        studentDatabase.clear();
         studentTeacherPairDatabase.clear();
     }
 }
