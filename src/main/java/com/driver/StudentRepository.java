@@ -25,19 +25,11 @@ public class StudentRepository {
     }
 
     public Student getStudentByName(String name) {
-       // return studentDatabase.get(name);
-        for(Student student:studentDatabase.values()){
-            if(student.getName().equals(name))return student;
-        }
-        return new Student();
+        return studentDatabase.get(name);
     }
 
     public Teacher getTeacherByName(String name) {
-        //return teacherDatabase.get(name);
-        for(Teacher teacher:teacherDatabase.values()){
-            if(teacher.getName().equals(name))return teacher;
-        }
-        return new Teacher();
+        return teacherDatabase.get(name);
     }
 
     public List<String> getStudentsByTeacherName(String teacher) {
@@ -53,18 +45,26 @@ public class StudentRepository {
     }
 
     public void deleteTeacherByName(String teacher) {
-        for(int i=0;i<teacherDatabase.size();i++){
-            if(teacherDatabase.get(i).equals(teacher))
-                teacherDatabase.remove(teacher);
-            break;
+        ArrayList<Student> pairList=new ArrayList<>();
+        if(studentTeacherPairDatabase.containsKey(teacher)){
+            pairList=(studentTeacherPairDatabase.get(teacher));
+            for(Student student:pairList){
+                studentDatabase.remove(student);
+            }
+            studentTeacherPairDatabase.remove(teacher);
         }
-        studentTeacherPairDatabase.remove(teacher);
         teacherDatabase.remove(teacher);
     }
 
     public void deleteAllTeachers() {
+        for (String teacher : studentTeacherPairDatabase.keySet()) {
+            List<Student> pairlist = studentTeacherPairDatabase.get(teacher);
+            for (Student st : pairlist) {
+                if (studentDatabase.containsKey(st))
+                    studentDatabase.remove(st);
+            }
+        }
         teacherDatabase.clear();
-        studentDatabase.clear();
         studentTeacherPairDatabase.clear();
     }
 }
